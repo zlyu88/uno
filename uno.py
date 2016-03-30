@@ -38,13 +38,13 @@ class Uno():
         return result
 
 
-    def base(self):
+    def base_choice(self):
         card = choice(self.deck)
         if card[0] != 'w':
             self.deck.pop(self.deck.index(card))
             return card
         else:
-            return self.base()  
+            return self.base_choice()  
 
 
     def action(self, count, base, card):
@@ -257,10 +257,10 @@ class Uno():
             self.start_game()
         else:
             if self.general_score['Bot'] > 50:
-                print 'Player\'s total score is ' + general_score['Player']
+                print 'Player\'s total score is ' + str(self.general_score['Player'])
                 print 'Bot wins total game!'
             else:
-                print 'Bot\'s total score is ' + general_score['Bot']
+                print 'Bot\'s total score is ' + str(self.general_score['Bot'])
                 print 'Player wins total game!'
 
     #Perevertannia base tobto stborennia novoi kolody koly zakinchylysia karty
@@ -273,7 +273,7 @@ class Uno():
     def start_game(self):   
         self.player_cards.extend(self.take_cards(6))
         self.bot_cards.extend(self.take_cards(2))
-        self.base = self.base()
+        self.base = self.base_choice()
         self.player_choice(self.player_cards, self.base, self.summ1, self.count)
 
 
