@@ -48,6 +48,8 @@ class Uno():
 
 
     def action(self, count, base, card):
+        color_list = ['r', 'g', 'b', 'y']
+        
         if card[0:4].lower() != 'pass' and card[0:4] != 'wild' and base[0] \
         == card[0] or card[0:4].lower() != 'pass' and card[0:4] != 'wild' \
         and base[len(base) - 1] == card[len(card) - 1]:
@@ -79,7 +81,10 @@ class Uno():
                 
         elif card == 'wild':
             if count % 2 == 0:
-                wild = raw_input('Next player have to put (r/g/b/y) card ')
+                wild = ''
+                while wild not in color_list:
+                    wild = raw_input('Next player have to put'
+                                     '( r / g / b / y ) card:  ')
             
             else:
                 wild = choice(['r', 'g', 'b', 'y'])
@@ -89,8 +94,10 @@ class Uno():
             count += 1
         elif card == 'wild+4':
             if count % 2 == 0:
-                wild = raw_input('''Next player have to take
-                                 4 cards and put (r/g/b/y) card ''')
+                wild = ''
+                while wild not in color_list:
+                    wild = raw_input('Next player have to take 4 cards and put'
+                                     '( r / g / b / y ) card:  ')
                 print len(self.deck)
                 for i in range(4):
                     self.new_deck() #Perevirka kolody
@@ -222,10 +229,10 @@ class Uno():
                 sum_score_player += 10
             elif (card[0].lower() != 'p' and card[0] != 'w' and card[0] != '0'):
                 sum_score_player += int(card[0])
-            elif card[0:5] == 'wild_':
-                sum_score_player += 15 #V gri propuskaie cei variant, okremo f-ia praciuie dobre 
             elif card[0:5] == 'wild+':
                 sum_score_player += 20
+            elif card[0:4] == 'wild':
+                sum_score_player += 15 
         general_score['Player'] += sum_score_player
         print sum_score_player
         
@@ -234,14 +241,14 @@ class Uno():
                 sum_score_bot += 10
             elif card[0].lower() != 'p' and card[0] != 'w' and card[0] != '0':
                 sum_score_bot += int(card[0])
-            elif card[0:5] == 'wild_':
-                sum_score_bot += 15  #V gri propuskaie cei variant, okremo f-ia praciuie dobre 
             elif card[0:5] == 'wild+':
                 sum_score_bot += 20
+            elif card[0:4] == 'wild':
+                sum_score_bot += 15
         general_score['Bot'] += sum_score_bot
         print sum_score_bot
 
-        self.go_on() #Ne spraciovuie perezapusk gry
+        self.go_on()
 
     #Pobtorennia gry, rozdacha kart jakshcho zagalny rahunok ni v kogo ne perevyshchuie 50
     def go_on(self):
