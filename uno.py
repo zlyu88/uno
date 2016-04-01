@@ -1,3 +1,6 @@
+_authors_ = 'yurii_kit_&_oleh_bogutskii'
+
+
 import sys
 import webbrowser
 import threading
@@ -5,16 +8,18 @@ from random import choice
 from time import sleep
 from os import system
 
-
 class Uno():
 
-
-    deck = ['1_y', '2_y', '3_y', '4_y', '5_y','0_y', 'Pass_y','pass+2_y',
-            'wild','wild+4', '1_r', '2_r', '3_r','4_r', '5_r', '0_r',
-            'Pass_r','pass+2_r', 'wild', 'wild+4', '1_g', '2_g', '3_g',
-            '4_g', '5_g', '0_g', 'Pass_g', 'pass+2_g', 'wild', 'wild+4', 
-            '1_b', '2_b', '3_b', '4_b', '5_b', '0_b', 'Pass_b', 'pass+2_b',
-            'wild', 'wild+4'] 
+    deck = ['1_y', '2_y', '3_y', '4_y', '5_y','0_y', 'Pass_y',
+            '1_y', '2_y', '3_y', '4_y', '5_y', 'pass+2_y',
+            'wild', '1_r', '2_r', '3_r','4_r', '5_r', '0_r',
+            'wild+4', '1_r', '2_r', '3_r','4_r', '5_r',
+            'Pass_r', 'wild', 'wild+4', '1_g', '2_g', '3_g',
+            '1_g', '2_g', '3_g', '4_g', '5_g', 'pass+2_r',
+            '4_g', '5_g', '0_g', 'Pass_g', 'pass+2_g', 'wild', 
+            'wild+4', '1_b', '2_b', '3_b', '4_b', '5_b', '0_b',
+            '1_b', '2_b', '3_b', '4_b', '5_b', 'Pass_b', 
+            'pass+2_b', 'wild', 'wild+4'] 
     deck2 = []
 
     player_cards = []
@@ -35,7 +40,6 @@ class Uno():
                 summ += 1
         return result
 
-
     def base_choice(self):
         card = choice(self.deck)
         if card[0] != 'w':
@@ -45,23 +49,25 @@ class Uno():
         else:
             return self.base_choice()  
 
-
     def action(self, count, base, card):
         color_list = ['r', 'g', 'b', 'y']
+        decide = []
         
-        if card[0:4].lower() != 'pass' and card[0:4] != 'wild' and base[0] \
-        == card[0] or card[0:4].lower() != 'pass' and card[0:4] != 'wild' \
-        and base[len(base) - 1] == card[len(card) - 1]:
+        if card[0: 4].lower() != 'pass' and card[0: 4] != 'wild' \
+        and base[0] == card[0] or card[0: 4].lower() != 'pass' \
+        and card[0: 4] != 'wild' and base[len(base) - 1] \
+        == card[len(card) - 1]:
             count += 1
             base = card
                 
-        elif card[0:4] == 'Pass' and base[0:4] == 'Pass' or card[0:4] \
-        == 'Pass' and base[len(base) - 1] == card[len(card) - 1]:
+        elif card[0: 4] == 'Pass' and base[0: 4] == 'Pass' or \
+        card[0: 4] == 'Pass' and base[len(base) - 1] == \
+        card[len(card) - 1]:
             print '\nNext player pass'
             sleep(2)
             base = card
         
-        elif card[0:4] == 'pass' and base[0:4] == 'pass' or card[0:4] \
+        elif card[0: 4] == 'pass' and base[0: 4] == 'pass' or card[0: 4] \
         == 'pass' and base[len(base) - 1] == card[len(card) - 1]:
             print '\nNext player takes 2 card and pass'
             sleep(2)
@@ -78,17 +84,22 @@ class Uno():
                     self.deck.pop(self.deck.index(add_card))
                     self.player_cards.append(add_card)
             base = card
-
-                
+               
         elif card == 'wild':
             if count % 2 == 0:
                 wild = ''
                 while wild not in color_list:
                     wild = raw_input('\nNext player have to put'
-                                     '( r / g / b / y ) card:  ')
-            
+                                     '( r / g / b / y ) card: ')
+
             else:
-                wild = choice(['r', 'g', 'b', 'y'])
+            	for color in self.bot_cards:
+                    if color[2] in ['r', 'g', 'b', 'y']:
+                        decide.append(color[2])
+                if decide:
+                	wild = choice(decide)
+                else:
+                    wild = choice(['r', 'g', 'b', 'y'])
                 print '\nPlayer have to put ' + wild
                 sleep(2)
             base = ' ' + wild        
@@ -97,15 +108,21 @@ class Uno():
             if count % 2 == 0:
                 wild = ''
                 while wild not in color_list:
-                    wild = raw_input('\nNext player have to take 4 cards and put'
-                                     '( r / g / b / y ) card:  ')
+                    wild = raw_input('\nNext player have to take 4 '
+                    	    'cards and put ( r / g / b / y ) card: ')
                 for i in range(4):
                     self.new_deck() 
                     card = choice(self.deck)
                     self.deck.pop(self.deck.index(card))
                     self.bot_cards.append(card)
             else:
-                wild = choice(['r', 'g', 'b', 'y'])
+                for color in self.bot_cards:
+                    if color[2] in ['r', 'g', 'b', 'y']:
+                        decide.append(color[2])
+                if decide:
+                	wild = choice(decide)
+                else:
+                    wild = choice(['r', 'g', 'b', 'y'])
                 print 'Player have to put ' + wild
                 sleep(2)
                 for i in range(4):
@@ -121,8 +138,8 @@ class Uno():
         else:
             self.player_choice(self.player_cards, base, self.summ1, count)
 
-
-    def no_card(self, count, player_cards, bot_cards, deck, base, summ1, summ2):
+    def no_card(self, count, player_cards, bot_cards, \
+                deck, base, summ1, summ2):
         if count % 2 != 0:
             card = choice(deck)
             deck.pop(deck.index(card))
@@ -134,7 +151,6 @@ class Uno():
             player_cards.append(card)
             self.player_choice(player_cards, base, summ1, count)
 
-
     def player_choice(self, player_cards, base, summ1, count):
         system('clear')
         print '\n----- Player move -----\n'
@@ -143,8 +159,8 @@ class Uno():
         sleep(1)
         move = []
         for card in player_cards:
-            if card[0] == base[0] or base[len(base)-1] == card[len(card)-1] \
-            or card[0] == 'w':
+            if card[0] == base[0] or base[len(base)-1] == \
+            card[len(card)-1] or card[0] == 'w':
                 move.append(card)
         if move == []:
             print "\nYou don't have a suitable card"
@@ -158,11 +174,12 @@ class Uno():
             output = ''
             while output not in move:
                 try:
-                    output = move[(int(raw_input('\nYour choice:  ' )) - 1)]
+                    output = move[(int(raw_input('\nYour choice: ')) - 1)]
                 except IndexError:
                     print "Error. It's must existing value"
                 except ValueError:
                     print "Error. It's must be integer"
+            
             self.deck2.append(output)
             player_cards.pop(player_cards.index(output))
             if player_cards:
@@ -179,15 +196,14 @@ class Uno():
             print '\nPlayer takes 1 card\nBASE is: %s'% base
             sleep(2)
             summ1 += 1
-            self.no_card(count, player_cards, self.bot_cards, self.deck, base,\
-                         summ1, self.summ2)
+            self.no_card(count, player_cards, self.bot_cards, self.deck, \
+                         base, summ1, self.summ2)
         elif summ1:
             print 'Player has no card to put'
             sleep(1)
             count += 1
             output = base
             self.bot_choice(self.bot_cards, base, self.summ2, count)
-
 
     def bot_choice(self, bot_cards, base, summ2, count):
         system('clear')
@@ -200,7 +216,7 @@ class Uno():
         for card in bot_cards:
             if card[0] == base[0] or base[len(base)-1] == card[len(card)-1]:
                 move.append(card)
-            elif card == 'wild' or card == 'wild+4' or card[0:4] == base[0:4]:
+            elif card == 'wild' or card == 'wild+4' or card[0: 4] == base[0: ]:
                 move.append(card)
         #print 'Bot can chose: %s\n'% move
         sleep(1.5)
@@ -229,23 +245,19 @@ class Uno():
             output = base
             self.player_choice(self.player_cards, base, self.summ1, count)
                
-    #Funkciia pidrahunku ochok
     def final_score(self, player_cards, bot_cards, general_score):
         print '\n-----The score is-----\n'
         sum_score_player = 0
         sum_score_bot = 0
-        
-        #print player_cards 
-        #print bot_cards 
 
         for card in player_cards:
             if (card[0].lower() != 'p' and card[0] != 'w' and card[0] == '0'):
                 sum_score_player += 10
             elif (card[0].lower() != 'p' and card[0] != 'w' and card[0] != '0'):
                 sum_score_player += int(card[0])
-            elif card[0:5] == 'wild+':
+            elif card[0: 5] == 'wild+':
                 sum_score_player += 20
-            elif card[0:4] == 'wild':
+            elif card[0: 4] == 'wild':
                 sum_score_player += 15 
         general_score['Player'] += sum_score_player
         print 'Player ' + str(sum_score_player)
@@ -255,16 +267,15 @@ class Uno():
                 sum_score_bot += 10
             elif card[0].lower() != 'p' and card[0] != 'w' and card[0] != '0':
                 sum_score_bot += int(card[0])
-            elif card[0:5] == 'wild+':
+            elif card[0: 5] == 'wild+':
                 sum_score_bot += 20
-            elif card[0:4] == 'wild':
+            elif card[0: 4] == 'wild':
                 sum_score_bot += 15
         general_score['Bot'] += sum_score_bot
         print 'Bot ' + str(sum_score_bot)
 
         self.go_on()
 
-    #Pobtorennia gry, rozdacha kart jakshcho zagalny rahunok ni v kogo ne perevyshchuie 125
     def go_on(self):
         print '\n-----Total score is:-----\n'
         sleep(2)
@@ -280,33 +291,33 @@ class Uno():
             self.start_game()
         else:
             if self.general_score['Player'] > 125:
-                print 'Player\'s total score is ' + str(self.general_score['Player'])
+                print 'Player\'s total score is ' + \
+                str(self.general_score['Player'])
                 print '\nBot wins total game!'
             else:
-                print 'Bot\'s total score is ' + str(self.general_score['Bot'])
+                print 'Bot\'s total score is ' + \
+                str(self.general_score['Bot'])
                 print '\nPlayer wins total game!'
 
-    #Perevertannia base tobto stborennia novoi kolody koly zakinchylysia karty
     def new_deck(self):
         if not self.deck:
             self.deck = self.deck2[0:len(self.deck2) - 1]
-
 
     def start_game(self):
         system('clear')
         print '----- UNO - Card Game -----'
         print "\nDescription:\
-               \nThe aim of the game is to be the first player to score 125\
-               \npoints. This is achieved (usually over several rounds of play)\
-               \nby a player discarding all of their cards and earning points\
-               \ncorresponding to the value of the remaining cards still held\
-               \nby the other players.\
+               \nThe aim of the game is to be the first player to \
+               \nscore 125 points. This is achieved (usually over \
+               \nseveral rounds of play) by a player discarding \
+               \nall of their cards and earning points corresponding \
+               \nto the value of the remaining cards still held by \
+               \nthe other players.\
                \n\nAbbreviation:\
-               \nr - red, y -yellow, g - green, b - blue\
-               \ncard with 0 it's 10 card\
+               \nr - red, y - yellow, g - green, b - blue.\
                \n\nFor Example:\
                \n1_y it's 1 Yellow card\
-               \n0_g it's 10 Green card\
+               \n0_g it's 0 Green card\
                \n\n0. More details about UNO\
                \n1. Start game\
                \n9. Exit"
@@ -322,19 +333,20 @@ class Uno():
                 sleep(2)
                 system('clear')
         if usr_choice == 0:
-            uno_web = webbrowser.open('https://en.wikipedia.org/wiki/Uno_(card_game)')
+            uno_web = webbrowser.open\
+            ('https://en.wikipedia.org/wiki/Uno_(card_game)')
             new_start = self.start_game()
             t1 = threading.Thread(args=(uno_web))
             t2 = threading.Thread(args =(new_start))
             t1.start()
             t2.start()
-
             
         elif usr_choice == 1:
             self.player_cards.extend(self.take_cards(7))
             self.bot_cards.extend(self.take_cards(7))
             self.base = self.base_choice()
-            self.player_choice(self.player_cards, self.base, self.summ1, self.count)
+            self.player_choice(self.player_cards, self.base, \
+            self.summ1, self.count)
         elif usr_choice == 9:
             sys.exit()
 
