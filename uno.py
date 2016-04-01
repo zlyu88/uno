@@ -32,7 +32,7 @@ class Uno():
     def take_cards(self, number):
         result = []
         summ = 0
-        for i in range(len(self.deck)):
+        for num in range(len(self.deck)):
             if summ < number:
                 card = choice(self.deck)
                 self.deck.pop(self.deck.index(card))
@@ -54,21 +54,22 @@ class Uno():
         decide = []
         
         if card[0: 4].lower() != 'pass' and card[0: 4] != 'wild' \
-        and base[0] == card[0] or card[0: 4].lower() != 'pass' \
-        and card[0: 4] != 'wild' and base[len(base) - 1] \
-        == card[len(card) - 1]:
+            and base[0] == card[0] or card[0: 4].lower() != 'pass' \
+            and card[0: 4] != 'wild' and base[len(base) - 1] \
+            == card[len(card) - 1]:
             count += 1
             base = card
                 
         elif card[0: 4] == 'Pass' and base[0: 4] == 'Pass' or \
-        card[0: 4] == 'Pass' and base[len(base) - 1] == \
-        card[len(card) - 1]:
+            card[0: 4] == 'Pass' and base[len(base) - 1] == \
+            card[len(card) - 1]:
             print '\nNext player pass'
             sleep(2)
             base = card
         
+        
         elif card[0: 4] == 'pass' and base[0: 4] == 'pass' or card[0: 4] \
-        == 'pass' and base[len(base) - 1] == card[len(card) - 1]:
+            == 'pass' and base[len(base) - 1] == card[len(card) - 1]:
             print '\nNext player takes 2 card and pass'
             sleep(2)
             if count % 2 == 0:
