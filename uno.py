@@ -1,3 +1,6 @@
+import sys
+import webbrowser
+import threading
 from random import choice
 from time import sleep
 from os import system
@@ -289,11 +292,51 @@ class Uno():
             self.deck = self.deck2[0:len(self.deck2) - 1]
 
 
-    def start_game(self):   
-        self.player_cards.extend(self.take_cards(7))
-        self.bot_cards.extend(self.take_cards(7))
-        self.base = self.base_choice()
-        self.player_choice(self.player_cards, self.base, self.summ1, self.count)
+    def start_game(self):
+        system('clear')
+        print '----- UNO - Card Game -----'
+        print "\nDescription:\
+               \nThe aim of the game is to be the first player to score 125\
+               \npoints. This is achieved (usually over several rounds of play)\
+               \nby a player discarding all of their cards and earning points\
+               \ncorresponding to the value of the remaining cards still held\
+               \nby the other players.\
+               \n\nAbbreviation:\
+               \nr - red, y -yellow, g - green, b - blue\
+               \ncard with 0 it's 10 card\
+               \n\nFor Example:\
+               \n1_y it's 1 Yellow card\
+               \n0_g it's 10 Green card\
+               \n\n0. More details about UNO\
+               \n1. Start game\
+               \n9. Exit"
+
+        varriants = [0, 1, 9]
+        usr_choice = None
+
+        while usr_choice not in varriants:
+            try:     
+                usr_choice = int(raw_input('\nEnter your choice: '))
+            except ValueError:
+                print "Error. It's must be 0, 1 or 9"
+                sleep(2)
+                system('clear')
+        if usr_choice == 0:
+            uno_web = webbrowser.open('https://en.wikipedia.org/wiki/Uno_(card_game)')
+            new_start = self.start_game()
+            t1 = threading.Thread(args=(uno_web))
+            t2 = threading.Thread(args =(new_start))
+            t1.start()
+            t2.start()
+
+            
+        elif usr_choice == 1:
+            self.player_cards.extend(self.take_cards(7))
+            self.bot_cards.extend(self.take_cards(7))
+            self.base = self.base_choice()
+            self.player_choice(self.player_cards, self.base, self.summ1, self.count)
+        elif usr_choice == 9:
+            sys.exit()
 
 
 uno = Uno()
