@@ -1,5 +1,7 @@
 from random import choice
 from time import sleep
+from os import system
+
 
 class Uno():
 
@@ -52,14 +54,14 @@ class Uno():
                 
         elif card[0:4] == 'Pass' and base[0:4] == 'Pass' or card[0:4] \
         == 'Pass' and base[len(base) - 1] == card[len(card) - 1]:
-            print 'Next player pass'
-            sleep(1)
+            print '\nNext player pass'
+            sleep(2)
             base = card
         
         elif card[0:4] == 'pass' and base[0:4] == 'pass' or card[0:4] \
         == 'pass' and base[len(base) - 1] == card[len(card) - 1]:
-            print 'Next player takes 2 card and pass'
-            sleep(1)
+            print '\nNext player takes 2 card and pass'
+            sleep(2)
             if count % 2 == 0:
                 for i in range(2):
                     self.new_deck()
@@ -79,19 +81,20 @@ class Uno():
             if count % 2 == 0:
                 wild = ''
                 while wild not in color_list:
-                    wild = raw_input('Next player have to put'
+                    wild = raw_input('\nNext player have to put'
                                      '( r / g / b / y ) card:  ')
             
             else:
                 wild = choice(['r', 'g', 'b', 'y'])
-                print 'Player have to put ' + wild
+                print '\nPlayer have to put ' + wild
+                sleep(2)
             base = ' ' + wild        
             count += 1
         elif card == 'wild+4':
             if count % 2 == 0:
                 wild = ''
                 while wild not in color_list:
-                    wild = raw_input('Next player have to take 4 cards and put'
+                    wild = raw_input('\nNext player have to take 4 cards and put'
                                      '( r / g / b / y ) card:  ')
                 for i in range(4):
                     self.new_deck() 
@@ -101,6 +104,7 @@ class Uno():
             else:
                 wild = choice(['r', 'g', 'b', 'y'])
                 print 'Player have to put ' + wild
+                sleep(2)
                 for i in range(4):
                     self.new_deck()
                     card = choice(self.deck)
@@ -129,6 +133,7 @@ class Uno():
 
 
     def player_choice(self, player_cards, base, summ1, count):
+        system('clear')
         print '\n----- Player move -----\n'
         print 'BASE is: %s\n'% base
         print 'Your cards: %s'% player_cards
@@ -138,8 +143,14 @@ class Uno():
             if card[0] == base[0] or base[len(base)-1] == card[len(card)-1] \
             or card[0] == 'w':
                 move.append(card)
-
-        print 'You can use: %s'% move
+        if move == []:
+            print "\nYou don't have a suitable card"
+            sleep(1)
+        else:
+            can_choice = ''
+            for cards in range(len(move)):
+                can_choice += '{0}.[{1}], '.format(cards+1, move[cards])
+            print 'You can choice:  %s'% can_choice
         if move:
             output = ''
             while output not in move:
@@ -153,14 +164,17 @@ class Uno():
             player_cards.pop(player_cards.index(output))
             if player_cards:
                 self.action(count, base, output)
+                sleep(1)
+                system('clear')
             else:
                 print '\nPlayer win!'
                 self.final_score(self.player_cards, self.bot_cards,\
-                self.general_score) 
+                self.general_score)
+                sleep(2)
         elif not move and self.deck and not summ1:
             sleep(2)
-            print 'Player takes 1 card\nBASE is: %s'% base
-            sleep(1)
+            print '\nPlayer takes 1 card\nBASE is: %s'% base
+            sleep(2)
             summ1 += 1
             self.no_card(count, player_cards, self.bot_cards, self.deck, base,\
                          summ1, self.summ2)
@@ -173,7 +187,8 @@ class Uno():
 
 
     def bot_choice(self, bot_cards, base, summ2, count):
-        print '\n-----Bot move-----\n'
+        system('clear')
+        print '\n----- Bot move -----\n'
         print 'BASE is: %s\n'% base
         #print 'Bot cards: %s'% bot_cards 
         sleep(1)
@@ -191,7 +206,7 @@ class Uno():
             self.deck2.append(output)
             bot_cards.pop(bot_cards.index(output))
             print 'Bot chose: %s '% output
-            sleep(1)
+            sleep(2)
             if bot_cards:
                 self.action(count, base, output)
             else:
@@ -246,14 +261,13 @@ class Uno():
 
         self.go_on()
 
-    #Pobtorennia gry, rozdacha kart jakshcho zagalny rahunok ni v kogo ne perevyshchuie 50
+    #Pobtorennia gry, rozdacha kart jakshcho zagalny rahunok ni v kogo ne perevyshchuie 125
     def go_on(self):
         print '\n-----Total score is:-----\n'
         sleep(2)
         for key in self.general_score:
             print key, self.general_score[key]
         sleep(1)
-        #tut postavyv limit 50 shchob mozhna bulo shvydshe pereviryty robotu. Maie buty 125
         if self.general_score['Player'] < 125 and self.general_score['Bot'] < 125:
             print '\nLet\'s go on!'
             self.deck.extend(self.player_cards)
