@@ -272,8 +272,8 @@ class Uno():
             self.deck2.append(self.player_cards[0])
             self.player_cards.pop(0)
             self.double_bot = True
-            self.final_score(self.player_cards, self.bot_cards,\
-            self.general_score)
+            #self.final_score(self.player_cards, self.bot_cards,\
+            #self.general_score)
             
         elif answer == '2':
             print '\nPlayer win!'
@@ -282,8 +282,11 @@ class Uno():
             self.player_cards.pop(0)
             sleep(2)
             self.general_score['Player'] -= 25
-            self.final_score(self.player_cards, self.bot_cards,\
-            self.general_score)
+            #self.final_score(self.player_cards, self.bot_cards,\
+            #self.general_score)
+        
+        self.final_score(self.player_cards, self.bot_cards,\
+                        self.general_score)
             
     
     def extra_wild_bot(self):
