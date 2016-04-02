@@ -1,12 +1,13 @@
 _authors_ = 'yurii_kit_&_oleh_bogutskii'
 
 
-import sys
-import webbrowser
-import threading
+from os import system
 from random import choice
 from time import sleep
-from os import system
+import sys
+import threading
+import webbrowser
+
 
 class Uno():
 
