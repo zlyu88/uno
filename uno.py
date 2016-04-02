@@ -20,7 +20,7 @@ class Uno():
             'wild+4', '1_b', '2_b', '3_b', '4_b', '5_b', '0_b',
             '1_b', '2_b', '3_b', '4_b', '5_b', 'Pass_b',
             'pass+2_b', 'wild', 'wild+4'] 
-            
+
     deck2 = []
 
     player_cards = []
@@ -161,9 +161,10 @@ class Uno():
             for item in few_same:
                 self.deck2.append(item)
                 self.player_cards.pop(self.player_cards.index(item))
-                print '\nTop is ' + top_card
-                sleep(2)
-                return top_card
+
+            print '\nTop is ' + top_card
+            sleep(2)
+            return top_card
         else:
             return card
         sleep(3)
@@ -182,9 +183,9 @@ class Uno():
             for item in few_same:
                 self.deck2.append(item)
                 self.bot_cards.pop(self.bot_cards.index(item))
-                print '\nTop is ' + top_card
-                sleep(2)
-                return top_card
+            print '\nTop is ' + top_card
+            sleep(2)
+            return top_card
         else:
             return card    
 
