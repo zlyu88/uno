@@ -59,20 +59,18 @@ class Uno():
         
         if card[0: 4].lower() != 'pass' and card[0: 4] != 'wild' \
             and base[0] == card[0] or card[0: 4].lower() != 'pass' \
-            and card[0: 4] != 'wild' and base[len(base) - 1] \
-            == card[len(card) - 1]:
+            and card[0: 4] != 'wild' and base[-1] == card[-1]:
             count += 1
             base = self.put_few(count, card)
                 
         elif card[0: 4] == 'Pass' and base[0: 4] == 'Pass' or \
-            card[0: 4] == 'Pass' and base[len(base) - 1] == \
-            card[len(card) - 1]:
+            card[0: 4] == 'Pass' and base[-1] == card[-1]:
             print '\nNext player pass'
             sleep(2)
             base = card
         
         elif card[0: 4] == 'pass' and base[0: 4] == 'pass' or card[0: 4] \
-            == 'pass' and base[len(base) - 1] == card[len(card) - 1]:
+            == 'pass' and base[-1] == card[-1]:
             print '\nNext player takes 2 card and pass'
             sleep(2)
             if count % 2 == 0:
@@ -215,10 +213,10 @@ class Uno():
 
         move = []
         for card in player_cards:
-            if card[0] == base[0] or base[len(base)-1] == \
-            card[len(card)-1] or card[0] == 'w':
+            if card[0] == base[0] or base[-1] == \
+            card[-1] or card[0] == 'w':
                 move.append(card)
-        if move == []:
+        if not move:
             print "\nYou don't have a suitable card"
             sleep(1)
         else:
@@ -296,8 +294,6 @@ class Uno():
             self.deck2.append(self.bot_cards[0])
             self.bot_cards.pop(0)
             self.double_player = True
-            self.final_score(self.player_cards, self.bot_cards,\
-            self.general_score)
             
         elif answer == 2:
             print '\nBot win!'
@@ -305,8 +301,9 @@ class Uno():
             self.deck2.append(self.bot_cards[0])
             self.bot_cards.pop(0)
             self.general_score['Bot'] -= 25
-            self.final_score(self.player_cards, self.bot_cards,\
-            self.general_score)
+        
+        self.final_score(self.player_cards, self.bot_cards,\
+                        self.general_score)
             
 
     def bot_choice(self, bot_cards, base, summ2, count):
@@ -318,13 +315,13 @@ class Uno():
         print 'Bot thinking...\n'
 
         if len(bot_cards) == 1 and bot_cards[0] == 'wild':
-                self.extra_wild_bot()
+            self.extra_wild_bot()
 
         move = []
         for card in bot_cards:
-            if card[0] == base[0] or base[len(base)-1] == card[len(card)-1]:
+            if card[0] == base[0] or base[-1] == card[-1]:
                 move.append(card)
-            elif card == 'wild' or card == 'wild+4' or card[0: 4] == base[0: ]:
+            elif card == 'wild' or card == 'wild+4' or card[0: 4] == base[0:]:
                 move.append(card)
         #print 'Bot can chose: %s\n'% move
         sleep(1.5)
