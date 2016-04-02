@@ -466,8 +466,8 @@ class Uno():
             t2.start()
             
         elif usr_choice == 1:
-            self.player_cards.extend(self.take_cards(4))
-            self.bot_cards.extend(self.take_cards(1))
+            self.player_cards.extend(self.take_cards(7))
+            self.bot_cards.extend(self.take_cards(7))
             self.base = self.base_choice()
             self.player_choice(self.player_cards, self.base, \
             self.summ1, self.count)
